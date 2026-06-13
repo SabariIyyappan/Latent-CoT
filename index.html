@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Interpreting Latent CoT Reasoning as Dynamical Systems</title>
+
+  <!-- Bulma CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet" />
+  <!-- MathJax -->
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="static/css/style.css" />
+</head>
+
+<body>
+
+<!-- ============================================================ HERO -->
+<section class="hero is-dark is-bold">
+  <div class="hero-body">
+    <div class="container has-text-centered">
+      <span class="venue-badge">ICML 2026 &middot; FoGen Workshop</span>
+      <h1 class="title is-2 paper-title">
+        Interpreting Latent CoT Reasoning<br>as Dynamical Systems
+      </h1>
+      <p class="subtitle author-line">
+        [Author Names] &nbsp;&bull;&nbsp; [Affiliations]
+      </p>
+      <div class="buttons is-centered hero-buttons">
+        <a href="https://openreview.net/forum?id=ZAGsOMAwBV" target="_blank"
+           class="button is-light is-rounded">
+          <span class="icon"><i class="fas fa-file-alt"></i></span>
+          <span>Paper</span>
+        </a>
+        <a href="https://github.com/SabariIyyappan/Latent-CoT" target="_blank"
+           class="button is-light is-rounded">
+          <span class="icon"><i class="fab fa-github"></i></span>
+          <span>Code</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ ABSTRACT -->
+<section class="section" id="abstract">
+  <div class="container is-max-desktop">
+    <h2 class="section-heading">Abstract</h2>
+
+    <div class="tldr-box">
+      <span class="tldr-label">TL;DR</span>
+      Latent CoT trajectories form structured dynamical systems. CODI acts as a stable attractor. COCONUT behaves as an unstable expanding system. Sim-CoT supervision tightens both.
+    </div>
+
+    <div class="abstract-box">
+      <p class="abstract-text">
+        Recent latent reasoning methods such as CODI and COCONUT face a fundamental interpretability problem. They carry multiple superimposed candidate traces in hidden space at each step, which obscures how reasoning evolves. Existing mechanistic methods reveal compression, shortcuts, and superposition but do not explain how reasoning evolves across latent steps. To address this gap, we model the sequence of latent tokens as a trajectory in representation space and apply dynamical-system analysis to characterize reasoning evolution. Using both quantitative metrics (step-to-step change, direction consistency, Lyapunov sensitivity) and qualitative projections (UMAP, DMD, PHATE), we show that latent CoT exhibits structured, non-random dynamics with two distinct stability classes. CODI behaves as a stable attractor. COCONUT behaves as an unstable expanding system. Sim-CoT supervision tightens both behaviors, handling latent instability without changing the underlying dynamics. This framework advances the interpretability of latent CoT reasoning and introduces actionable findings to catalyze further research.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ METHOD -->
+<section class="section bg-light" id="method">
+  <div class="container is-max-desktop">
+    <h2 class="section-heading">Method</h2>
+
+    <p class="body-text">
+      We propose a framework for analyzing latent chain-of-thought reasoning as a dynamical system. Given an input, a latent CoT model produces a sequence of hidden states $z_1, z_2, \ldots, z_T$ across $T = 6$ reasoning steps. We treat this sequence as a trajectory in representation space. Four model configurations are analyzed: CODI and COCONUT, each in Vanilla and Sim-CoT settings, all trained on GPT-2-small backbones using the GSM8K benchmark.
+    </p>
+
+    <figure class="methodology-figure">
+      <img src="static/images/methodology.png" alt="Dynamical System Analysis Framework" />
+      <figcaption>
+        Overview of our analysis framework. (1) GSM8K dataset. (2) Four model configurations. (3) Six latent hidden states forming a trajectory in representation space. (4) Quantitative metrics and qualitative projections. (5) Latent space and dynamics visualizations.
+      </figcaption>
+    </figure>
+
+    <p class="body-text">
+      We characterize trajectories using two groups of metrics. Step-based metrics measure how trajectories move between consecutive steps: step-to-step change $\|\Delta_t\| = \|z_{t+1} - z_t\|_2$, direction consistency $C_t = \cos(\Delta_t, \Delta_{t-1})$, and arc length $L = \sum_{t} \|z_{t+1} - z_t\|_2$. Stability metrics capture sensitivity and convergence: a Lyapunov surrogate $\lambda(t) = \log(\|\Delta_{t+1}\| / \|\Delta_t\|)$ and perturbation divergence under Gaussian noise injection. For qualitative analysis, we project trajectories using DMD, PHATE, UMAP, PCA, and t-SNE, then visualize them as sequences of points with temporal ordering preserved.
+    </p>
+  </div>
+</section>
+
+<!-- ============================================================ QUANTITATIVE RESULTS -->
+<section class="section" id="quantitative">
+  <div class="container is-max-desktop">
+    <h2 class="section-heading">Quantitative Analysis</h2>
+    <p class="section-intro">
+      Metrics are computed directly on the original high-dimensional representations. Each 2&times;2 grid compares CODI and COCONUT under Vanilla and Sim-CoT training.
+    </p>
+
+    <!-- Step-to-Step Change -->
+    <div class="result-block">
+      <h3 class="result-title">Step-to-Step Change</h3>
+      <p class="body-text">
+        CODI shows a uniform curve with variance in the Vanilla setting. Under Sim-CoT, it becomes monotonically decreasing, suggesting convergence in the final phase. COCONUT shows a premature drop from step 2 to 3 in Vanilla, then stabilizes under Sim-CoT. CODI exhibits more stable transitions overall.
+      </p>
+      <div class="metric-grid">
+        <div class="metric-grid-header"></div>
+        <div class="metric-grid-header has-text-centered"><strong>CODI</strong></div>
+        <div class="metric-grid-header has-text-centered"><strong>COCONUT</strong></div>
+
+        <div class="metric-grid-label"><span class="rotated-label">Vanilla</span></div>
+        <figure class="fig-card-sm">
+          <img src="static/images/figures/step2stepchange_vanilla_codi.png" alt="Step2Step CODI Vanilla" />
+        </figure>
+        <figure class="fig-card-sm">
+          <img src="static/images/figures/step2stepchange_vanilla_coconut.png" alt="Step2Step COCONUT Vanilla" />
+        </figure>
+
+        <div class="metric-grid-label"><span class="rotated-label">Sim-CoT</span></div>
+        <figure class="fig-card-sm">
+          <img src="static/images/figures/step2stepchange_simcot_codi.png" alt="Step2Step CODI SimCoT" />
+        </figure>
+        <figure class="fig-card-sm">
+          <img src="static/images/figures/step2stepchange_simcot_coconut.png" alt="Step2Step COCONUT SimCoT" />
+        </figure>
+      </div>
+    </div>
+
+    <!-- Lyapunov Sensitivity -->
+    <div class="result-block">
+      <h3 class="result-title">Lyapunov Sensitivity</h3>
+      <p class="body-text">
+        CODI shows a monotonically decreasing curve with negative values, indicating local convergence throughout. Sim-CoT deepens this convergence further. COCONUT shows a sharp positive spike at $t=3$ in Vanilla, a genuine mid-chain exploration phase native to its curriculum-trained dynamics. Sim-CoT removes this spike and flattens the curve, replacing exploration with a deterministic transition.
+      </p>
+      <div class="metric-grid">
+        <div class="metric-grid-header"></div>
+        <div class="metric-grid-header has-text-centered"><strong>CODI</strong></div>
+        <div class="metric-grid-header has-text-centered"><strong>COCONUT</strong></div>
+
+        <div class="metric-grid-label"><span class="rotated-label">Vanilla</span></div>
+        <figure class="fig-card-sm">
+          <img src="static/images/figures/lyapunovsensitivity_vanilla_codi.png" alt="Lyapunov CODI Vanilla" />
+        </figure>
+        <figure class="fig-card-sm">
+          <img src="static/images/figures/lyapunovsensitivity_vanilla_coconut.png" alt="Lyapunov COCONUT Vanilla" />
+        </figure>
+
+        <div class="metric-grid-label"><span class="rotated-label">Sim-CoT</span></div>
+        <figure class="fig-card-sm">
+          <img src="static/images/figures/lyapunovsensitivity_simcot_codi.png" alt="Lyapunov CODI SimCoT" />
+        </figure>
+        <figure class="fig-card-sm">
+          <img src="static/images/figures/lyapunovsensitivity_simcot_coconut.png" alt="Lyapunov COCONUT SimCoT" />
+        </figure>
+      </div>
+    </div>
+
+    <!-- Direction Consistency -->
+    <div class="result-block">
+      <h3 class="result-title">Direction Consistency</h3>
+      <p class="body-text">
+        CODI Vanilla shows consistently negative values across all transitions. The trajectory reverses direction at every step. Sim-CoT shifts this toward near-zero, replacing reversals with orthogonal pivots. COCONUT Vanilla starts with opposing transitions, becomes near-orthogonal at $t=3$, then reverts. Sim-CoT stabilizes COCONUT into a single consistent opposing pattern. Neither paradigm produces the forward alignment expected of a directionally converging reasoner.
+      </p>
+      <div class="metric-grid">
+        <div class="metric-grid-header"></div>
+        <div class="metric-grid-header has-text-centered"><strong>CODI</strong></div>
+        <div class="metric-grid-header has-text-centered"><strong>COCONUT</strong></div>
+
+        <div class="metric-grid-label"><span class="rotated-label">Vanilla</span></div>
+        <figure class="fig-card-sm">
+          <img src="static/images/figures/directionconsistency_vanilla_codi.png" alt="Direction CODI Vanilla" />
+        </figure>
+        <figure class="fig-card-sm">
+          <img src="static/images/figures/directionconsistency_vanilla_coconut.png" alt="Direction COCONUT Vanilla" />
+        </figure>
+
+        <div class="metric-grid-label"><span class="rotated-label">Sim-CoT</span></div>
+        <figure class="fig-card-sm">
+          <img src="static/images/figures/directionconsistency_simcot_codi.png" alt="Direction CODI SimCoT" />
+        </figure>
+        <figure class="fig-card-sm">
+          <img src="static/images/figures/directionconsistency_simcot_coconut.png" alt="Direction COCONUT SimCoT" />
+        </figure>
+      </div>
+    </div>
+
+    <!-- Arc Length -->
+    <div class="result-block">
+      <h3 class="result-title">Arc Length</h3>
+      <p class="body-text">
+        Arc length summarizes total trajectory displacement, reflecting overall reasoning effort. It captures how much latent space the model traverses from start to end of the reasoning chain.
+      </p>
+      <div class="columns is-multiline figure-row">
+        <div class="column is-half">
+          <figure class="fig-card">
+            <img src="static/images/figures/coconut_arc_length.png" alt="Arc Length COCONUT Vanilla" />
+            <figcaption>COCONUT &mdash; Vanilla</figcaption>
+          </figure>
+        </div>
+        <div class="column is-half">
+          <figure class="fig-card">
+            <img src="static/images/figures/arc_length.png" alt="Arc Length CODI Vanilla" />
+            <figcaption>CODI &mdash; Vanilla</figcaption>
+          </figure>
+        </div>
+        <div class="column is-half">
+          <figure class="fig-card">
+            <img src="static/images/figures/simcot_COCONUT_arc_length.png" alt="Arc Length COCONUT SimCoT" />
+            <figcaption>COCONUT &mdash; Sim-CoT</figcaption>
+          </figure>
+        </div>
+        <div class="column is-half">
+          <figure class="fig-card">
+            <img src="static/images/figures/simcot_CODI_arc_length.png" alt="Arc Length CODI SimCoT" />
+            <figcaption>CODI &mdash; Sim-CoT</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+
+    <!-- Perturbation Stability -->
+    <div class="result-block">
+      <h3 class="result-title">Perturbation Stability</h3>
+      <p class="body-text">
+        Perturbation stability measures trajectory divergence when Gaussian noise is injected into input embeddings, tested at $\sigma \in \{0.01, 0.1, 1.0\}$. Growing divergence indicates sensitivity to initial conditions. Incorrect predictions consistently diverge more than correct ones.
+      </p>
+      <div class="columns is-variable is-3 figure-row">
+        <div class="column">
+          <figure class="fig-card">
+            <img src="static/images/figures/perturbation_simcot_codi.png" alt="Perturbation CODI SimCoT" />
+            <figcaption>Sim-CoT CODI &mdash; relative divergence at $\sigma \in \{0.01, 0.1, 1.0\}$.</figcaption>
+          </figure>
+        </div>
+        <div class="column">
+          <figure class="fig-card">
+            <img src="static/images/figures/perturbation_simcot_coconut.png" alt="Perturbation COCONUT SimCoT" />
+            <figcaption>Sim-CoT COCONUT &mdash; relative divergence at $\sigma \in \{0.01, 0.1, 1.0\}$.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================ QUALITATIVE RESULTS -->
+<section class="section bg-light" id="qualitative">
+  <div class="container is-max-desktop">
+    <h2 class="section-heading">Qualitative Analysis</h2>
+    <p class="section-intro">
+      Trajectory projections reveal how each model organizes its reasoning manifold. CODI and COCONUT exhibit fundamentally different geometric signatures.
+    </p>
+
+    <!-- DMD -->
+    <div class="result-block">
+      <h3 class="result-title">DMD Projections</h3>
+      <p class="body-text">
+        DMD projects each trajectory onto its dominant modes of variation. CODI shows a two-lobe pattern where all latent states remain tightly packed throughout the chain. This is the signature of a stable attractor. COCONUT shows a butterfly pattern where latent states start near the center at $t=0$ and spread outward by $t=5$. This reflects an expanding dynamical system exploring multiple reasoning paths simultaneously.
+      </p>
+      <div class="columns is-variable is-3 figure-row">
+        <div class="column">
+          <figure class="fig-card">
+            <img src="static/images/figures/trajectory_dmd_vanilla_codi.png" alt="DMD - CODI Vanilla" />
+            <figcaption>CODI &mdash; Vanilla. Tightly packed two-lobe structure across all latent steps.</figcaption>
+          </figure>
+        </div>
+        <div class="column">
+          <figure class="fig-card">
+            <img src="static/images/figures/trajectory_dmd_vanilla_coconut.png" alt="DMD - COCONUT Vanilla" />
+            <figcaption>COCONUT &mdash; Vanilla. Butterfly pattern with latent states diverging outward across steps.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHATE -->
+    <div class="result-block">
+      <h3 class="result-title">PHATE Projections</h3>
+      <p class="body-text">
+        PHATE uses a multi-scale diffusion process to expose the global manifold structure. CODI shows compact, interleaved representations bounded throughout the chain. COCONUT shows each latent step occupying a distinct region, with beginning and end tokens positioned close together. This proximity hints at a possible shortcut pathway through the reasoning chain.
+      </p>
+      <div class="columns is-variable is-3 figure-row">
+        <div class="column">
+          <figure class="fig-card">
+            <img src="static/images/figures/trajectory_phate_vanilla_codi.png" alt="PHATE - CODI Vanilla" />
+            <figcaption>CODI &mdash; Vanilla. Interleaved representations with no shortcut signature.</figcaption>
+          </figure>
+        </div>
+        <div class="column">
+          <figure class="fig-card">
+            <img src="static/images/figures/trajectory_phate_vanilla_coconut.png" alt="PHATE - COCONUT Vanilla" />
+            <figcaption>COCONUT &mdash; Vanilla. Beginning and end tokens cluster close, hinting at shortcut pathways.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+
+    <!-- UMAP -->
+    <div class="result-block">
+      <h3 class="result-title">UMAP Projections</h3>
+      <p class="body-text">
+        UMAP preserves local neighborhood relationships while balancing global structure. COCONUT separates each latent step into its own region, indicating distinct per-step reasoning roles. CODI groups tokens into two role-based clusters: mid-chain tokens spread broadly, while beginning and end tokens remain densely contained.
+      </p>
+      <div class="columns is-variable is-3 figure-row">
+        <div class="column">
+          <figure class="fig-card">
+            <img src="static/images/figures/trajectory_umap_vanilla_codi.png" alt="UMAP - CODI Vanilla" />
+            <figcaption>CODI &mdash; Vanilla. Two clusters: mid-chain tokens diffused, terminal tokens densely contained.</figcaption>
+          </figure>
+        </div>
+        <div class="column">
+          <figure class="fig-card">
+            <img src="static/images/figures/trajectory_umap_vanilla_coconut.png" alt="UMAP - COCONUT Vanilla" />
+            <figcaption>COCONUT &mdash; Vanilla. Each latent step occupies a distinct region, reinforcing step-specific roles.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================ APPENDIX: EXTRA PROJECTIONS -->
+<section class="section" id="extra-projections">
+  <div class="container is-max-desktop">
+    <h2 class="section-heading">Additional Trajectory Projections</h2>
+    <p class="section-intro">PCA and t-SNE projections for the Vanilla CoT setting, plus 3D visualizations across all four model configurations.</p>
+
+    <div class="tabs is-centered is-medium is-boxed" id="proj-tabs">
+      <ul>
+        <li class="is-active" data-tab="pca"><a>PCA</a></li>
+        <li data-tab="tsne"><a>t-SNE</a></li>
+        <li data-tab="3d"><a>3D Trajectories</a></li>
+      </ul>
+    </div>
+
+    <!-- PCA -->
+    <div class="tab-content is-active" id="tab-pca">
+      <div class="columns is-variable is-3 figure-row">
+        <div class="column">
+          <figure class="fig-card">
+            <img src="static/images/figures/coconut_traj_pca.png" alt="PCA COCONUT" />
+            <figcaption>COCONUT &mdash; PCA projection.</figcaption>
+          </figure>
+        </div>
+        <div class="column">
+          <figure class="fig-card">
+            <img src="static/images/figures/codi_traj_pca.png" alt="PCA CODI" />
+            <figcaption>CODI &mdash; PCA projection.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+
+    <!-- t-SNE -->
+    <div class="tab-content" id="tab-tsne">
+      <div class="columns is-variable is-3 figure-row">
+        <div class="column">
+          <figure class="fig-card">
+            <img src="static/images/figures/coconut_traj_tsne.png" alt="t-SNE COCONUT" />
+            <figcaption>COCONUT &mdash; t-SNE projection.</figcaption>
+          </figure>
+        </div>
+        <div class="column">
+          <figure class="fig-card">
+            <img src="static/images/figures/codi_traj_tsne.png" alt="t-SNE CODI" />
+            <figcaption>CODI &mdash; t-SNE projection.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3D -->
+    <div class="tab-content" id="tab-3d">
+      <p class="body-text" style="margin-bottom:1.5rem;">
+        3D trajectory plots for DMD and PHATE projections across all four model configurations. The same geometric signatures seen in 2D are preserved in three dimensions.
+      </p>
+
+      <h4 class="subsection-label">DMD &mdash; 3D</h4>
+      <div class="columns is-multiline figure-row">
+        <div class="column is-half">
+          <figure class="fig-card">
+            <img src="static/images/figures/3d_trajectory_dmd_vanilla_coconut.png" alt="3D DMD COCONUT Vanilla" />
+            <figcaption>COCONUT &mdash; Vanilla</figcaption>
+          </figure>
+        </div>
+        <div class="column is-half">
+          <figure class="fig-card">
+            <img src="static/images/figures/3d_trajectory_dmd_vanilla_codi.png" alt="3D DMD CODI Vanilla" />
+            <figcaption>CODI &mdash; Vanilla</figcaption>
+          </figure>
+        </div>
+        <div class="column is-half">
+          <figure class="fig-card">
+            <img src="static/images/figures/3d_trajectory_dmd_simcot_coconut.png" alt="3D DMD COCONUT SimCoT" />
+            <figcaption>COCONUT &mdash; Sim-CoT</figcaption>
+          </figure>
+        </div>
+        <div class="column is-half">
+          <figure class="fig-card">
+            <img src="static/images/figures/3d_trajectory_dmd_simcot_codi.png" alt="3D DMD CODI SimCoT" />
+            <figcaption>CODI &mdash; Sim-CoT</figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <h4 class="subsection-label">PHATE &mdash; 3D</h4>
+      <div class="columns is-multiline figure-row">
+        <div class="column is-half">
+          <figure class="fig-card">
+            <img src="static/images/figures/3d_trajectory_phate_vanilla_coconut.png" alt="3D PHATE COCONUT Vanilla" />
+            <figcaption>COCONUT &mdash; Vanilla</figcaption>
+          </figure>
+        </div>
+        <div class="column is-half">
+          <figure class="fig-card">
+            <img src="static/images/figures/3d_trajectory_phate_vanilla_codi.png" alt="3D PHATE CODI Vanilla" />
+            <figcaption>CODI &mdash; Vanilla</figcaption>
+          </figure>
+        </div>
+        <div class="column is-half">
+          <figure class="fig-card">
+            <img src="static/images/figures/3d_trajectory_phate_simcot_coconut.png" alt="3D PHATE COCONUT SimCoT" />
+            <figcaption>COCONUT &mdash; Sim-CoT</figcaption>
+          </figure>
+        </div>
+        <div class="column is-half">
+          <figure class="fig-card">
+            <img src="static/images/figures/3d_trajectory_phate_simcot_codi.png" alt="3D PHATE CODI SimCoT" />
+            <figcaption>CODI &mdash; Sim-CoT</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================ APPENDIX: CONCEPT-WISE -->
+<section class="section bg-light" id="concept-wise">
+  <div class="container is-max-desktop">
+    <h2 class="section-heading">Concept-wise Analysis</h2>
+    <p class="section-intro">
+      Metrics broken down by the seven GSM8K math concept categories: Geometry, Rates &amp; Speed, Percentages &amp; Ratios, Money &amp; Pricing, Fractions &amp; Decimals, Multiplication &amp; Division, and Arithmetic &amp; Multi-step.
+    </p>
+
+    <div class="tabs is-centered is-medium is-boxed" id="concept-tabs">
+      <ul>
+        <li class="is-active" data-tab="coconut-concept"><a>COCONUT</a></li>
+        <li data-tab="codi-concept"><a>CODI</a></li>
+      </ul>
+    </div>
+
+    <!-- COCONUT concept-wise -->
+    <div class="tab-content is-active" id="tab-coconut-concept">
+      <div class="result-block">
+        <h4 class="subsection-label">Step-to-Step Change</h4>
+        <figure class="fig-card fig-full">
+          <img src="static/images/figures/coconut_concept_step2step_change_gsm8k.png" alt="COCONUT Concept Step2Step" />
+          <figcaption>COCONUT step-to-step change across GSM8K concept categories.</figcaption>
+        </figure>
+      </div>
+      <div class="result-block">
+        <h4 class="subsection-label">Direction Consistency</h4>
+        <figure class="fig-card fig-full">
+          <img src="static/images/figures/coconut_concept_direction_consistency_gsm8k.png" alt="COCONUT Concept Direction" />
+          <figcaption>COCONUT direction consistency across GSM8K concept categories.</figcaption>
+        </figure>
+      </div>
+      <div class="result-block">
+        <h4 class="subsection-label">Lyapunov Sensitivity</h4>
+        <figure class="fig-card fig-full">
+          <img src="static/images/figures/coconut_concept_lyapunov_gsm8k.png" alt="COCONUT Concept Lyapunov" />
+          <figcaption>COCONUT Lyapunov sensitivity across GSM8K concept categories.</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <!-- CODI concept-wise -->
+    <div class="tab-content" id="tab-codi-concept">
+      <div class="result-block">
+        <h4 class="subsection-label">Step-to-Step Change</h4>
+        <figure class="fig-card fig-full">
+          <img src="static/images/figures/codi_concept_step2step_change_gsm8k.png" alt="CODI Concept Step2Step" />
+          <figcaption>CODI step-to-step change across GSM8K concept categories.</figcaption>
+        </figure>
+      </div>
+      <div class="result-block">
+        <h4 class="subsection-label">Direction Consistency</h4>
+        <figure class="fig-card fig-full">
+          <img src="static/images/figures/codi_concept_direction_consistency_gsm8k.png" alt="CODI Concept Direction" />
+          <figcaption>CODI direction consistency across GSM8K concept categories.</figcaption>
+        </figure>
+      </div>
+      <div class="result-block">
+        <h4 class="subsection-label">Lyapunov Sensitivity</h4>
+        <figure class="fig-card fig-full">
+          <img src="static/images/figures/codi_concept_lyapunov_gsm8k.png" alt="CODI Concept Lyapunov" />
+          <figcaption>CODI Lyapunov sensitivity across GSM8K concept categories.</figcaption>
+        </figure>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================ CITATION -->
+<section class="section" id="citation">
+  <div class="container is-max-desktop">
+    <h2 class="section-heading">Citation</h2>
+    <pre class="bibtex-block"><code>@inproceedings{latentcot-dynamics2026,
+  title     = {Interpreting Latent {CoT} Reasoning as Dynamical Systems},
+  booktitle = {ICML 2026 Workshop on Foundations of Generative Modeling},
+  year      = {2026},
+  url       = {https://openreview.net/forum?id=ZAGsOMAwBV}
+}</code></pre>
+  </div>
+</section>
+
+<!-- ============================================================ FOOTER -->
+<footer class="footer">
+  <div class="content has-text-centered">
+    <p>
+      Website template inspired by
+      <a href="https://nerfies.github.io" target="_blank">Nerfies</a> and
+      <a href="https://klindtlab.github.io/lejepa-identifiability/" target="_blank">LeJEPA</a>.
+      &copy; 2026 The Authors.
+    </p>
+  </div>
+</footer>
+
+<!-- JS -->
+<script src="static/js/tabs.js"></script>
+
+</body>
+</html>
