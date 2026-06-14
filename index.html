@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans&display=swap" rel="stylesheet" />
   <!-- MathJax -->
   <script>
     MathJax = {
@@ -49,6 +49,30 @@
           <span>Code</span>
         </a>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ TABLE OF CONTENTS -->
+<section class="section" id="toc">
+  <div class="container is-max-desktop">
+    <h2 class="section-heading">Contents</h2>
+    <div class="content">
+      <ol>
+        <li><a href="#abstract">Abstract</a></li>
+        <li><a href="#method">Method</a></li>
+        <li><a href="#quantitative">Quantitative Analysis</a></li>
+        <li><a href="#qualitative">Qualitative Analysis</a></li>
+        <li><a href="#extra-projections">Additional Trajectory Projections</a></li>
+        <li><a href="#supplementary">Supplementary Material</a>
+          <ul style="margin-top: 0.3rem">
+            <li><a href="#supp-3d-simcot">S.1. 3D Sim-CoT Trajectories</a></li>
+            <li><a href="#supp-arc-length">S.2. Arc Length (Sim-CoT)</a></li>
+            <li><a href="#supp-concept">S.3. Concept-wise Metrics</a></li>
+          </ul>
+        </li>
+        <li><a href="#citation">Citation</a></li>
+      </ol>
     </div>
   </div>
 </section>
@@ -198,25 +222,13 @@
         <div class="column is-half">
           <figure class="fig-card">
             <img src="static/images/figures/coconut_arc_length.png" alt="Arc Length COCONUT Vanilla" />
-            <figcaption>COCONUT &mdash; Vanilla</figcaption>
+            <figcaption>COCONUT (Vanilla)</figcaption>
           </figure>
         </div>
         <div class="column is-half">
           <figure class="fig-card">
             <img src="static/images/figures/arc_length.png" alt="Arc Length CODI Vanilla" />
-            <figcaption>CODI &mdash; Vanilla</figcaption>
-          </figure>
-        </div>
-        <div class="column is-half">
-          <figure class="fig-card">
-            <img src="static/images/figures/simcot_COCONUT_arc_length.png" alt="Arc Length COCONUT SimCoT" />
-            <figcaption>COCONUT &mdash; Sim-CoT</figcaption>
-          </figure>
-        </div>
-        <div class="column is-half">
-          <figure class="fig-card">
-            <img src="static/images/figures/simcot_CODI_arc_length.png" alt="Arc Length CODI SimCoT" />
-            <figcaption>CODI &mdash; Sim-CoT</figcaption>
+            <figcaption>CODI (Vanilla)</figcaption>
           </figure>
         </div>
       </div>
@@ -232,13 +244,13 @@
         <div class="column">
           <figure class="fig-card">
             <img src="static/images/figures/perturbation_simcot_codi.png" alt="Perturbation CODI SimCoT" />
-            <figcaption>Sim-CoT CODI &mdash; relative divergence at $\sigma \in \{0.01, 0.1, 1.0\}$.</figcaption>
+            <figcaption>CODI (Sim-CoT): relative divergence at $\sigma \in \{0.01, 0.1, 1.0\}$.</figcaption>
           </figure>
         </div>
         <div class="column">
           <figure class="fig-card">
             <img src="static/images/figures/perturbation_simcot_coconut.png" alt="Perturbation COCONUT SimCoT" />
-            <figcaption>Sim-CoT COCONUT &mdash; relative divergence at $\sigma \in \{0.01, 0.1, 1.0\}$.</figcaption>
+            <figcaption>COCONUT (Sim-CoT): relative divergence at $\sigma \in \{0.01, 0.1, 1.0\}$.</figcaption>
           </figure>
         </div>
       </div>
@@ -265,13 +277,13 @@
         <div class="column">
           <figure class="fig-card">
             <img src="static/images/figures/trajectory_dmd_vanilla_codi.png" alt="DMD - CODI Vanilla" />
-            <figcaption>CODI &mdash; Vanilla. Tightly packed two-lobe structure across all latent steps.</figcaption>
+            <figcaption>CODI (Vanilla). Tightly packed two-lobe structure across all latent steps.</figcaption>
           </figure>
         </div>
         <div class="column">
           <figure class="fig-card">
             <img src="static/images/figures/trajectory_dmd_vanilla_coconut.png" alt="DMD - COCONUT Vanilla" />
-            <figcaption>COCONUT &mdash; Vanilla. Butterfly pattern with latent states diverging outward across steps.</figcaption>
+            <figcaption>COCONUT (Vanilla). Butterfly pattern with latent states diverging outward across steps.</figcaption>
           </figure>
         </div>
       </div>
@@ -287,13 +299,13 @@
         <div class="column">
           <figure class="fig-card">
             <img src="static/images/figures/trajectory_phate_vanilla_codi.png" alt="PHATE - CODI Vanilla" />
-            <figcaption>CODI &mdash; Vanilla. Interleaved representations with no shortcut signature.</figcaption>
+            <figcaption>CODI (Vanilla). Interleaved representations with no shortcut signature.</figcaption>
           </figure>
         </div>
         <div class="column">
           <figure class="fig-card">
             <img src="static/images/figures/trajectory_phate_vanilla_coconut.png" alt="PHATE - COCONUT Vanilla" />
-            <figcaption>COCONUT &mdash; Vanilla. Beginning and end tokens cluster close, hinting at shortcut pathways.</figcaption>
+            <figcaption>COCONUT (Vanilla). Beginning and end tokens cluster close, hinting at shortcut pathways.</figcaption>
           </figure>
         </div>
       </div>
@@ -309,13 +321,13 @@
         <div class="column">
           <figure class="fig-card">
             <img src="static/images/figures/trajectory_umap_vanilla_codi.png" alt="UMAP - CODI Vanilla" />
-            <figcaption>CODI &mdash; Vanilla. Two clusters: mid-chain tokens diffused, terminal tokens densely contained.</figcaption>
+            <figcaption>CODI (Vanilla). Two clusters: mid-chain tokens diffused, terminal tokens densely contained.</figcaption>
           </figure>
         </div>
         <div class="column">
           <figure class="fig-card">
             <img src="static/images/figures/trajectory_umap_vanilla_coconut.png" alt="UMAP - COCONUT Vanilla" />
-            <figcaption>COCONUT &mdash; Vanilla. Each latent step occupies a distinct region, reinforcing step-specific roles.</figcaption>
+            <figcaption>COCONUT (Vanilla). Each latent step occupies a distinct region, reinforcing step-specific roles.</figcaption>
           </figure>
         </div>
       </div>
@@ -344,13 +356,13 @@
         <div class="column">
           <figure class="fig-card">
             <img src="static/images/figures/coconut_traj_pca.png" alt="PCA COCONUT" />
-            <figcaption>COCONUT &mdash; PCA projection.</figcaption>
+            <figcaption>COCONUT &ndash; PCA projection.</figcaption>
           </figure>
         </div>
         <div class="column">
           <figure class="fig-card">
             <img src="static/images/figures/codi_traj_pca.png" alt="PCA CODI" />
-            <figcaption>CODI &mdash; PCA projection.</figcaption>
+            <figcaption>CODI &ndash; PCA projection.</figcaption>
           </figure>
         </div>
       </div>
@@ -362,13 +374,13 @@
         <div class="column">
           <figure class="fig-card">
             <img src="static/images/figures/coconut_traj_tsne.png" alt="t-SNE COCONUT" />
-            <figcaption>COCONUT &mdash; t-SNE projection.</figcaption>
+            <figcaption>COCONUT &ndash; t-SNE projection.</figcaption>
           </figure>
         </div>
         <div class="column">
           <figure class="fig-card">
             <img src="static/images/figures/codi_traj_tsne.png" alt="t-SNE CODI" />
-            <figcaption>CODI &mdash; t-SNE projection.</figcaption>
+            <figcaption>CODI &ndash; t-SNE projection.</figcaption>
           </figure>
         </div>
       </div>
@@ -380,58 +392,34 @@
         3D trajectory plots for DMD and PHATE projections across all four model configurations. The same geometric signatures seen in 2D are preserved in three dimensions.
       </p>
 
-      <h4 class="subsection-label">DMD &mdash; 3D</h4>
+      <h4 class="subsection-label">DMD 3D</h4>
       <div class="columns is-multiline figure-row">
         <div class="column is-half">
           <figure class="fig-card">
             <img src="static/images/figures/3d_trajectory_dmd_vanilla_coconut.png" alt="3D DMD COCONUT Vanilla" />
-            <figcaption>COCONUT &mdash; Vanilla</figcaption>
+            <figcaption>COCONUT (Vanilla)</figcaption>
           </figure>
         </div>
         <div class="column is-half">
           <figure class="fig-card">
             <img src="static/images/figures/3d_trajectory_dmd_vanilla_codi.png" alt="3D DMD CODI Vanilla" />
-            <figcaption>CODI &mdash; Vanilla</figcaption>
-          </figure>
-        </div>
-        <div class="column is-half">
-          <figure class="fig-card">
-            <img src="static/images/figures/3d_trajectory_dmd_simcot_coconut.png" alt="3D DMD COCONUT SimCoT" />
-            <figcaption>COCONUT &mdash; Sim-CoT</figcaption>
-          </figure>
-        </div>
-        <div class="column is-half">
-          <figure class="fig-card">
-            <img src="static/images/figures/3d_trajectory_dmd_simcot_codi.png" alt="3D DMD CODI SimCoT" />
-            <figcaption>CODI &mdash; Sim-CoT</figcaption>
+            <figcaption>CODI (Vanilla)</figcaption>
           </figure>
         </div>
       </div>
 
-      <h4 class="subsection-label">PHATE &mdash; 3D</h4>
+      <h4 class="subsection-label">PHATE 3D</h4>
       <div class="columns is-multiline figure-row">
         <div class="column is-half">
           <figure class="fig-card">
             <img src="static/images/figures/3d_trajectory_phate_vanilla_coconut.png" alt="3D PHATE COCONUT Vanilla" />
-            <figcaption>COCONUT &mdash; Vanilla</figcaption>
+            <figcaption>COCONUT (Vanilla)</figcaption>
           </figure>
         </div>
         <div class="column is-half">
           <figure class="fig-card">
             <img src="static/images/figures/3d_trajectory_phate_vanilla_codi.png" alt="3D PHATE CODI Vanilla" />
-            <figcaption>CODI &mdash; Vanilla</figcaption>
-          </figure>
-        </div>
-        <div class="column is-half">
-          <figure class="fig-card">
-            <img src="static/images/figures/3d_trajectory_phate_simcot_coconut.png" alt="3D PHATE COCONUT SimCoT" />
-            <figcaption>COCONUT &mdash; Sim-CoT</figcaption>
-          </figure>
-        </div>
-        <div class="column is-half">
-          <figure class="fig-card">
-            <img src="static/images/figures/3d_trajectory_phate_simcot_codi.png" alt="3D PHATE CODI SimCoT" />
-            <figcaption>CODI &mdash; Sim-CoT</figcaption>
+            <figcaption>CODI (Vanilla)</figcaption>
           </figure>
         </div>
       </div>
@@ -440,68 +428,138 @@
   </div>
 </section>
 
-<!-- ============================================================ APPENDIX: CONCEPT-WISE -->
-<section class="section bg-light" id="concept-wise">
+<!-- ============================================================ SUPPLEMENTARY MATERIAL -->
+<section class="section bg-light" id="supplementary">
   <div class="container is-max-desktop">
-    <h2 class="section-heading">Concept-wise Analysis</h2>
+    <h2 class="section-heading">Supplementary Material</h2>
     <p class="section-intro">
-      Metrics broken down by the seven GSM8K math concept categories: Geometry, Rates &amp; Speed, Percentages &amp; Ratios, Money &amp; Pricing, Fractions &amp; Decimals, Multiplication &amp; Division, and Arithmetic &amp; Multi-step.
+      Additional figures from the paper appendix. Reference these in the paper as &ldquo;see Supplementary &sect;&thinsp;S.1&rdquo;, &ldquo;&sect;&thinsp;S.2&rdquo;, or &ldquo;&sect;&thinsp;S.3&rdquo; at the project page.
     </p>
 
-    <div class="tabs is-centered is-medium is-boxed" id="concept-tabs">
-      <ul>
-        <li class="is-active" data-tab="coconut-concept"><a>COCONUT</a></li>
-        <li data-tab="codi-concept"><a>CODI</a></li>
-      </ul>
+    <!-- A.2.4 — 3D Sim-CoT Trajectories (Figs 12 & 13) -->
+    <div class="result-block" id="supp-3d-simcot">
+      <h3 class="result-title">S.1. 3D Sim-CoT Trajectories</h3>
+      <p class="body-text">
+        3D DMD and PHATE trajectory projections across latent steps for the Sim-CoT training setting, for both CODI and COCONUT.
+      </p>
+
+      <h4 class="subsection-label">DMD 3D (Sim-CoT)</h4>
+      <div class="columns is-multiline figure-row">
+        <div class="column is-half">
+          <figure class="fig-card">
+            <img src="static/images/figures/3d_trajectory_dmd_simcot_coconut.png" alt="3D DMD COCONUT SimCoT" />
+            <figcaption>COCONUT (Sim-CoT)</figcaption>
+          </figure>
+        </div>
+        <div class="column is-half">
+          <figure class="fig-card">
+            <img src="static/images/figures/3d_trajectory_dmd_simcot_codi.png" alt="3D DMD CODI SimCoT" />
+            <figcaption>CODI (Sim-CoT)</figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <h4 class="subsection-label">PHATE 3D (Sim-CoT)</h4>
+      <div class="columns is-multiline figure-row">
+        <div class="column is-half">
+          <figure class="fig-card">
+            <img src="static/images/figures/3d_trajectory_phate_simcot_coconut.png" alt="3D PHATE COCONUT SimCoT" />
+            <figcaption>COCONUT (Sim-CoT)</figcaption>
+          </figure>
+        </div>
+        <div class="column is-half">
+          <figure class="fig-card">
+            <img src="static/images/figures/3d_trajectory_phate_simcot_codi.png" alt="3D PHATE CODI SimCoT" />
+            <figcaption>CODI (Sim-CoT)</figcaption>
+          </figure>
+        </div>
+      </div>
     </div>
 
-    <!-- COCONUT concept-wise -->
-    <div class="tab-content is-active" id="tab-coconut-concept">
-      <div class="result-block">
-        <h4 class="subsection-label">Step-to-Step Change</h4>
-        <figure class="fig-card fig-full">
-          <img src="static/images/figures/coconut_concept_step2step_change_gsm8k.png" alt="COCONUT Concept Step2Step" />
-          <figcaption>COCONUT step-to-step change across GSM8K concept categories.</figcaption>
-        </figure>
-      </div>
-      <div class="result-block">
-        <h4 class="subsection-label">Direction Consistency</h4>
-        <figure class="fig-card fig-full">
-          <img src="static/images/figures/coconut_concept_direction_consistency_gsm8k.png" alt="COCONUT Concept Direction" />
-          <figcaption>COCONUT direction consistency across GSM8K concept categories.</figcaption>
-        </figure>
-      </div>
-      <div class="result-block">
-        <h4 class="subsection-label">Lyapunov Sensitivity</h4>
-        <figure class="fig-card fig-full">
-          <img src="static/images/figures/coconut_concept_lyapunov_gsm8k.png" alt="COCONUT Concept Lyapunov" />
-          <figcaption>COCONUT Lyapunov sensitivity across GSM8K concept categories.</figcaption>
-        </figure>
+    <!-- A.3.1 — Arc Length: Sim-CoT (Figs 16 & 17) -->
+    <div class="result-block" id="supp-arc-length">
+      <h3 class="result-title">S.2. Arc Length (Sim-CoT)</h3>
+      <p class="body-text">
+        Arc length distributions for the Sim-CoT setting on GSM8K ($N = 8{,}792$), showing total trajectory displacement for each model.
+      </p>
+      <div class="columns is-variable is-3 figure-row">
+        <div class="column">
+          <figure class="fig-card">
+            <img src="static/images/figures/simcot_COCONUT_arc_length.png" alt="Arc Length COCONUT SimCoT" />
+            <figcaption>COCONUT (Sim-CoT) arc length distribution.</figcaption>
+          </figure>
+        </div>
+        <div class="column">
+          <figure class="fig-card">
+            <img src="static/images/figures/simcot_CODI_arc_length.png" alt="Arc Length CODI SimCoT" />
+            <figcaption>CODI (Sim-CoT) arc length distribution.</figcaption>
+          </figure>
+        </div>
       </div>
     </div>
 
-    <!-- CODI concept-wise -->
-    <div class="tab-content" id="tab-codi-concept">
-      <div class="result-block">
-        <h4 class="subsection-label">Step-to-Step Change</h4>
-        <figure class="fig-card fig-full">
-          <img src="static/images/figures/codi_concept_step2step_change_gsm8k.png" alt="CODI Concept Step2Step" />
-          <figcaption>CODI step-to-step change across GSM8K concept categories.</figcaption>
-        </figure>
+    <!-- A.3.3 — Concept-wise Metrics -->
+    <div class="result-block" id="supp-concept">
+      <h3 class="result-title">S.3. Concept-wise Metrics</h3>
+      <p class="body-text">
+        Metrics broken down by the seven GSM8K math concept categories: Geometry, Rates &amp; Speed, Percentages &amp; Ratios, Money &amp; Pricing, Fractions &amp; Decimals, Multiplication &amp; Division, and Arithmetic &amp; Multi-step.
+      </p>
+
+      <div class="tabs is-centered is-medium is-boxed" id="concept-tabs">
+        <ul>
+          <li class="is-active" data-tab="coconut-concept"><a>COCONUT</a></li>
+          <li data-tab="codi-concept"><a>CODI</a></li>
+        </ul>
       </div>
-      <div class="result-block">
-        <h4 class="subsection-label">Direction Consistency</h4>
-        <figure class="fig-card fig-full">
-          <img src="static/images/figures/codi_concept_direction_consistency_gsm8k.png" alt="CODI Concept Direction" />
-          <figcaption>CODI direction consistency across GSM8K concept categories.</figcaption>
-        </figure>
+
+      <!-- COCONUT concept-wise -->
+      <div class="tab-content is-active" id="tab-coconut-concept">
+        <div class="result-block">
+          <h4 class="subsection-label">Step-to-Step Change</h4>
+          <figure class="fig-card fig-full">
+            <img src="static/images/figures/coconut_concept_step2step_change_gsm8k.png" alt="COCONUT Concept Step2Step" />
+            <figcaption>COCONUT step-to-step change across GSM8K concept categories.</figcaption>
+          </figure>
+        </div>
+        <div class="result-block">
+          <h4 class="subsection-label">Direction Consistency</h4>
+          <figure class="fig-card fig-full">
+            <img src="static/images/figures/coconut_concept_direction_consistency_gsm8k.png" alt="COCONUT Concept Direction" />
+            <figcaption>COCONUT direction consistency across GSM8K concept categories.</figcaption>
+          </figure>
+        </div>
+        <div class="result-block">
+          <h4 class="subsection-label">Lyapunov Sensitivity</h4>
+          <figure class="fig-card fig-full">
+            <img src="static/images/figures/coconut_concept_lyapunov_gsm8k.png" alt="COCONUT Concept Lyapunov" />
+            <figcaption>COCONUT Lyapunov sensitivity across GSM8K concept categories.</figcaption>
+          </figure>
+        </div>
       </div>
-      <div class="result-block">
-        <h4 class="subsection-label">Lyapunov Sensitivity</h4>
-        <figure class="fig-card fig-full">
-          <img src="static/images/figures/codi_concept_lyapunov_gsm8k.png" alt="CODI Concept Lyapunov" />
-          <figcaption>CODI Lyapunov sensitivity across GSM8K concept categories.</figcaption>
-        </figure>
+
+      <!-- CODI concept-wise -->
+      <div class="tab-content" id="tab-codi-concept">
+        <div class="result-block">
+          <h4 class="subsection-label">Step-to-Step Change</h4>
+          <figure class="fig-card fig-full">
+            <img src="static/images/figures/codi_concept_step2step_change_gsm8k.png" alt="CODI Concept Step2Step" />
+            <figcaption>CODI step-to-step change across GSM8K concept categories.</figcaption>
+          </figure>
+        </div>
+        <div class="result-block">
+          <h4 class="subsection-label">Direction Consistency</h4>
+          <figure class="fig-card fig-full">
+            <img src="static/images/figures/codi_concept_direction_consistency_gsm8k.png" alt="CODI Concept Direction" />
+            <figcaption>CODI direction consistency across GSM8K concept categories.</figcaption>
+          </figure>
+        </div>
+        <div class="result-block">
+          <h4 class="subsection-label">Lyapunov Sensitivity</h4>
+          <figure class="fig-card fig-full">
+            <img src="static/images/figures/codi_concept_lyapunov_gsm8k.png" alt="CODI Concept Lyapunov" />
+            <figcaption>CODI Lyapunov sensitivity across GSM8K concept categories.</figcaption>
+          </figure>
+        </div>
       </div>
     </div>
 
