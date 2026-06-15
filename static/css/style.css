@@ -40,7 +40,19 @@ body {
 .author-line {
   font-size: 1.05rem;
   color: #cdd5e0 !important;
-  margin-bottom: 1.8rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.affiliation-line {
+  font-size: 0.9rem;
+  color: #b0bac8 !important;
+  margin-bottom: 0.3rem !important;
+}
+
+.affiliation-note {
+  font-size: 0.82rem;
+  color: #8a95a5 !important;
+  margin-bottom: 1.5rem !important;
 }
 
 .hero-buttons {
